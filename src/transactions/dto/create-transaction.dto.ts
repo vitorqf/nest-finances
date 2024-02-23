@@ -6,5 +6,5 @@ export class CreateTransactionDto {
   title: string;
   card: Card;
   category: Category;
-  date: string;
+  date: Date;
 }

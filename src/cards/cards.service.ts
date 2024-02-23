@@ -16,7 +16,9 @@ export class CardsService {
   }
 
   getCard(id: string) {
-    return this.cardsRepository.findOne({ where: { id } });
+    return this.cardsRepository.findOne({
+      where: { id },
+    });
   }
 
   findAll() {
