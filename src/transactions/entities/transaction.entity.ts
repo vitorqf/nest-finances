@@ -22,7 +22,7 @@ export class Transaction extends BaseEntity {
   @Column('int')
   amount: number;
 
-  @Column({ type: 'timestamp' })
+  @Column('date')
   date: Date;
 
   @CreateDateColumn({ type: 'timestamp' })

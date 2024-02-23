@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 
@@ -12,7 +12,10 @@ export class TransactionsController {
   }
 
   @Get()
-  async findAll() {
+  async findAll(@Query('date') date: Date) {
+    if (date) {
+      return this.transactionsService.findAllPerDate(date);
+    }
     return this.transactionsService.findAll();
   }
 
