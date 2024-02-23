@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CardsService } from './cards.service';
-import { CreateCardDto } from './cards.dto';
+import { CreateCardDto } from './dto/create-card.dto';
 
 @Controller('cards')
 export class CardsController {
-  constructor(private cardsService: CardsService) {}
+  constructor(private readonly cardsService: CardsService) {}
 
   @Post()
   async create(@Body() createCardDto: CreateCardDto) {

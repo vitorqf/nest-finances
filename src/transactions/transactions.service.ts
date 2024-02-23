@@ -1,19 +1,41 @@
 import { Injectable } from '@nestjs/common';
-import { Transaction } from 'src/models/transaction';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Transaction } from './entities/transaction.entity';
+import { Repository } from 'typeorm';
+import { CreateTransactionDto } from './dto/create-transaction.dto';
+import { Category } from 'src/categories/entities/category.entity';
 
 @Injectable()
 export class TransactionsService {
-  private readonly transactions: Transaction[] = [];
+  constructor(
+    @InjectRepository(Transaction)
+    private transactionsRepository: Repository<Transaction>,
+    @InjectRepository(Category)
+    private categoriesRepository: Repository<Category>,
+  ) {}
 
-  create(transaction: Transaction) {
-    this.transactions.push(transaction);
+  async getCategory(categorySlug: string): Promise<Category> {
+    const category = await this.categoriesRepository.findOne({
+      select: ['id'],
+      where: { slug: categorySlug },
+    });
+    return category;
   }
 
-  findAll(): Transaction[] {
-    return this.transactions;
+  async create(
+    createTransactionDto: CreateTransactionDto,
+  ): Promise<Transaction> {
+    createTransactionDto.category = await this.getCategory(
+      createTransactionDto.category.slug,
+    );
+    return await this.transactionsRepository.save(createTransactionDto);
   }
 
-  getTransaction(id: string): Transaction {
-    return this.transactions.find((transaction) => transaction.id === id);
+  findAll() {
+    return this.transactionsRepository.find();
+  }
+
+  getTransaction(id: string) {
+    return this.transactionsRepository.findOne({ where: { id } });
   }
 }

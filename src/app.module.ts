@@ -1,21 +1,33 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { TransactionsController } from './transactions/transactions.controller';
-import { TransactionsService } from './transactions/transactions.service';
-import { CardsService } from './cards/cards.service';
-import { UsersService } from './users/users.service';
-import { CardsController } from './cards/cards.controller';
-import { UsersController } from './users/users.controller';
+import { CardsModule } from './cards/cards.module';
+import { Card } from './cards/entities/card.entity';
+import { CategoriesModule } from './categories/categories.module';
+import { Category } from './categories/entities/category.entity';
+import { Transaction } from './transactions/entities/transaction.entity';
+import { TransactionsModule } from './transactions/transactions.module';
+import { User } from './users/entities/user.entity';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [],
-  controllers: [
-    AppController,
-    TransactionsController,
-    CardsController,
-    UsersController,
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: 'localhost',
+      port: 3306,
+      username: 'monty',
+      password: 'root123',
+      database: 'nest',
+      autoLoadEntities: true,
+      synchronize: true,
+    }),
+    TypeOrmModule.forFeature([Card, Transaction, User, Category]),
+    TransactionsModule,
+    CategoriesModule,
+    CardsModule,
+    UsersModule,
   ],
-  providers: [AppService, TransactionsService, CardsService, UsersService],
+  controllers: [AppController],
 })
 export class AppModule {}

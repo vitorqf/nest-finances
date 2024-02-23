@@ -1,19 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { Card } from 'src/models/card';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Card } from './entities/card.entity';
+import { Repository } from 'typeorm';
+import { CreateCardDto } from './dto/create-card.dto';
 
 @Injectable()
 export class CardsService {
-  private readonly cards: Card[] = [];
+  constructor(
+    @InjectRepository(Card)
+    private cardsRepository: Repository<Card>,
+  ) {}
 
-  create(card: Card) {
-    this.cards.push(card);
+  create(createCardDto: CreateCardDto): Promise<Card> {
+    return this.cardsRepository.save(createCardDto);
   }
 
-  getCard(id: string): Card {
-    return this.cards.find((card) => card.id === id);
+  getCard(id: string) {
+    return this.cardsRepository.findOne({ where: { id } });
   }
 
-  findAll(): Card[] {
-    return this.cards;
+  findAll() {
+    return this.cardsRepository.find();
   }
 }
