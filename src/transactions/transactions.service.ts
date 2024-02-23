@@ -28,14 +28,22 @@ export class TransactionsService {
     createTransactionDto.category = await this.getCategory(
       createTransactionDto.category.slug,
     );
+    createTransactionDto.date = new Date(createTransactionDto.date);
+    console.log('-------', createTransactionDto);
     return await this.transactionsRepository.save(createTransactionDto);
   }
 
   findAll() {
-    return this.transactionsRepository.find();
+    return this.transactionsRepository.find({
+      relations: ['category', 'card'],
+      order: { date: 'DESC' },
+    });
   }
 
   getTransaction(id: string) {
-    return this.transactionsRepository.findOne({ where: { id } });
+    return this.transactionsRepository.findOne({
+      where: { id },
+      relations: ['category', 'card'],
+    });
   }
 }
