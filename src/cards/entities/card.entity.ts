@@ -25,6 +25,9 @@ export class Card extends BaseEntity {
   @Column({ unique: true })
   title: string;
 
+  @Column({ length: 4 })
+  last_digits: string;
+
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
 

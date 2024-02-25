@@ -1,6 +1,8 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
+import { Pagination } from 'src/paginate/pagination';
+import { Transaction } from './entities/transaction.entity';
 
 @Controller('transactions')
 export class TransactionsController {
@@ -12,11 +14,18 @@ export class TransactionsController {
   }
 
   @Get()
-  async findAll(@Query('date') date: Date) {
-    if (date) {
-      return this.transactionsService.findAllPerDate(date);
-    }
-    return this.transactionsService.findAll();
+  async index(@Request() request): Promise<Pagination<Transaction>> {
+    return await this.transactionsService.paginate({
+      limit: request.query.hasOwnProperty('limit') ? request.query.limit : 10,
+      page: request.query.hasOwnProperty('page') ? request.query.page : 0,
+      filter: request.query.hasOwnProperty('filter')
+        ? request.query.filter
+        : '',
+      filterBy: request.query.hasOwnProperty('filterBy')
+        ? request.query.filterBy
+        : '',
+      date: request.query.hasOwnProperty('date') ? request.query.date : '',
+    });
   }
 
   @Get(':id')
