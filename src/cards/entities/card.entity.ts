@@ -22,7 +22,7 @@ export class Card extends BaseEntity {
   @Column('text')
   type: string;
 
-  @Column({ unique: true })
+  @Column()
   title: string;
 
   @Column({ length: 4 })

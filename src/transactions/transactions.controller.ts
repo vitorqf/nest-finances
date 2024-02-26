@@ -1,18 +1,28 @@
-import { Body, Controller, Get, Post, Request } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { Pagination } from 'src/paginate/pagination';
 import { Transaction } from './entities/transaction.entity';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('transactions')
 export class TransactionsController {
   constructor(private transactionsService: TransactionsService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() createTransactionDto: CreateTransactionDto) {
     return this.transactionsService.create(createTransactionDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   async index(@Request() request): Promise<Pagination<Transaction>> {
     return await this.transactionsService.paginate({
@@ -28,6 +38,7 @@ export class TransactionsController {
     });
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   async getTransaction(id: string) {
     return this.transactionsService.getTransaction(id);

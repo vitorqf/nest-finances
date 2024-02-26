@@ -19,10 +19,10 @@ export class TransactionsService {
     private cardsRepository: Repository<Card>,
   ) {}
 
-  async getCard(cardName: string) {
+  async getCard(cardId: string) {
     return this.cardsRepository.find({
       select: ['id'],
-      where: { title: cardName },
+      where: { id: cardId },
     });
   }
 

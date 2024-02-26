@@ -19,8 +19,16 @@ export class UsersService {
     return this.usersRepository.save(createUserDto);
   }
 
-  findOne(email: string) {
-    return this.usersRepository.findOne({ where: { email } });
+  async findPasswordHash(username: string) {
+    return await this.usersRepository
+      .createQueryBuilder()
+      .where({ email: username })
+      .addSelect('password')
+      .getRawOne();
+  }
+
+  findOne(username: string) {
+    return this.usersRepository.findOne({ where: { email: username } });
   }
 
   findAll() {
