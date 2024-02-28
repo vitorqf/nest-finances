@@ -21,7 +21,9 @@ export class CardsService {
     });
   }
 
-  findAll() {
-    return this.cardsRepository.find();
+  findAll(user: any) {
+    return this.cardsRepository.find({
+      where: { user: { email: user.username } },
+    });
   }
 }

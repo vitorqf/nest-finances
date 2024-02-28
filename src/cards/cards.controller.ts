@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { CardsService } from './cards.service';
 import { CreateCardDto } from './dto/create-card.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -15,8 +22,8 @@ export class CardsController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async findAll() {
-    return this.cardsService.findAll();
+  async findAll(@Request() req) {
+    return this.cardsService.findAll(req.user);
   }
 
   @UseGuards(JwtAuthGuard)
