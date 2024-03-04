@@ -14,10 +14,10 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 export class CardsController {
   constructor(private readonly cardsService: CardsService) {}
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Post()
-  async create(@Body() createCardDto: CreateCardDto) {
-    return this.cardsService.create(createCardDto);
+  async create(@Body() createCardDto: CreateCardDto, @Request() req) {
+    return this.cardsService.create(createCardDto, req.user);
   }
 
   @UseGuards(JwtAuthGuard)

@@ -3,4 +3,5 @@ export class CreateCardDto {
   type: 'Crédito' | 'Débito';
   title: string;
   last_digits: string;
+  userId: string;
 }
